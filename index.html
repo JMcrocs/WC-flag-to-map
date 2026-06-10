@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#f4efe6" />
+  <title>World Cup 2026 Flag-to-Map</title>
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <div class="site-shell">
+    <header class="topbar" aria-label="Site header">
+      <a class="brand" href="#top" aria-label="World Cup 2026 Flag-to-Map home">
+        <span class="brand-mark" aria-hidden="true">26</span>
+        <span>
+          <strong>Flag-to-Map</strong>
+          <small>World Cup 2026 learning game</small>
+        </span>
+      </a>
+      <div class="nav-actions">
+        <button class="quiet-button" id="homeButton" type="button">Home</button>
+        <button class="quiet-button" id="restartButton" type="button" hidden>Restart</button>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="screen home-screen" id="screenHome">
+        <div class="home-card">
+          <div class="home-copy">
+            <p class="eyebrow">One short game · five random teams</p>
+            <h1>Learn the World Cup through flags and maps.</h1>
+            <p class="lede">Each round shows an altered real flag. Type the country, place it on the map, then unlock a clear team card with ranking, outlook and a useful fact.</p>
+            <button class="primary-button large" id="startChallenge" type="button">Start the 5-round game</button>
+          </div>
+
+          <div class="flow-card" aria-label="Game flow">
+            <h2>How it works</h2>
+            <ol class="flow-list">
+              <li><span>1</span><div><strong>Decode the flag</strong><small>No multiple choice. Three typed attempts.</small></div></li>
+              <li><span>2</span><div><strong>Place the team</strong><small>Click or tap the country on a no-border world map.</small></div></li>
+              <li><span>3</span><div><strong>Read the card</strong><small>See FIFA rank, outlook, group and a fun fact.</small></div></li>
+            </ol>
+            <div class="score-note">
+              <strong>Simple scoring:</strong> Flag: up to 8 points. Map: up to 12 points. Five rounds, 100 points max.
+            </div>
+            <p class="data-note">Data snapshot: June 2026 tournament field and ranking snapshot.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen game-screen" id="screenGame" hidden>
+        <div class="scorebar" aria-label="Current game status">
+          <div>
+            <span class="score-label">Round</span>
+            <strong><span id="roundNow">1</span>/<span id="roundTotal">5</span></strong>
+          </div>
+          <div>
+            <span class="score-label">Score</span>
+            <strong><span id="totalScore">0</span>/100</strong>
+          </div>
+          <div>
+            <span class="score-label">Flags</span>
+            <strong id="flagScoreLabel">0/5</strong>
+          </div>
+          <div>
+            <span class="score-label">Avg. map error</span>
+            <strong id="avgError">—</strong>
+          </div>
+        </div>
+
+        <div class="game-layout">
+          <aside class="round-card" aria-live="polite">
+            <div class="round-head">
+              <span class="round-pill" id="roundLabel">Round 1 of 5</span>
+              <span class="view-pill" id="viewLabel">Altered flag</span>
+            </div>
+
+            <div class="flag-stage" id="flagStage">
+              <img id="promptFlag" class="prompt-flag" src="" alt="Altered flag to identify" />
+            </div>
+
+            <h2 id="promptTitle">Name the country from the altered flag.</h2>
+            <p id="promptText">Type the country name. The map opens after your answer.</p>
+
+            <div class="feedback-box" id="feedbackBox" hidden></div>
+            <div class="answer-panel" id="answerPanel"></div>
+
+            <div class="round-actions">
+              <button class="primary-button" id="nextButton" type="button" hidden>Next team</button>
+              <button class="primary-button" id="finishButton" type="button" hidden>See final cards</button>
+            </div>
+          </aside>
+
+          <section class="map-card" aria-label="World map placement area">
+            <div class="map-toolbar">
+              <div>
+                <strong>World map</strong>
+                <span id="mapInstruction">Locked until the flag is answered.</span>
+              </div>
+              <div class="map-controls" aria-label="Map controls">
+                <button class="map-button" id="zoomIn" type="button" aria-label="Zoom in">+</button>
+                <button class="map-button" id="zoomOut" type="button" aria-label="Zoom out">−</button>
+                <button class="map-button" id="resetMap" type="button">Reset</button>
+              </div>
+            </div>
+            <div class="map-wrap">
+              <svg id="worldMap" class="world-map" viewBox="0 0 1000 500" role="img" aria-label="Clickable world map"></svg>
+            </div>
+            <div class="map-footer">
+              <span id="selectedCoords">No spot selected.</span>
+              <button class="primary-button compact" id="confirmMap" type="button" disabled>Confirm spot</button>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="screen results-screen" id="screenResults" hidden>
+        <div class="results-card">
+          <p class="eyebrow">Game complete</p>
+          <h2>Your five team cards</h2>
+          <p id="resultsSummary">Your result will appear here.</p>
+          <div class="result-metrics" id="resultMetrics"></div>
+          <div class="results-actions">
+            <button class="primary-button" id="playAgain" type="button">Play another 5</button>
+            <button class="quiet-button" id="copyResults" type="button">Copy summary</button>
+          </div>
+        </div>
+        <div class="profile-grid" id="profileGrid" aria-label="Unlocked team profile cards"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="assets/data.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>
