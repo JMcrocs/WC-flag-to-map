@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#f4efe6" />
+  <meta name="description" content="A quick standalone World Cup 2026 learning game: decode altered flags, type the country, place teams or capitals on a borderless map, and unlock team cards." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%2348e0b0'/%3E%3Ctext x='32' y='40' text-anchor='middle' font-family='Arial' font-size='26' font-weight='900' fill='%2314213d'%3E26%3C/text%3E%3C/svg%3E" />
+  <title>World Cup 2026 Flag-to-Map</title>
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <div class="site-shell">
+    <header class="topbar" aria-label="Site header">
+      <a class="brand" href="#top" aria-label="World Cup 2026 Flag-to-Map home">
+        <span class="brand-mark" aria-hidden="true">26</span>
+        <span>
+          <strong>Flag-to-Map</strong>
+          <small>World Cup 2026 learning game</small>
+        </span>
+      </a>
+      <div class="nav-actions">
+        <button class="quiet-button" id="homeButton" type="button" hidden>Home</button>
+        <button class="quiet-button" id="restartButton" type="button" hidden>Restart</button>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="screen home-screen" id="screenHome">
+        <div class="home-card">
+          <div class="home-copy">
+            <p class="eyebrow">One game · five teams · no borders</p>
+            <h1>Know the flag. Find the team.</h1>
+            <p class="lede">Decode a real altered flag, type the answer, then place it on a clean world map with no country borders. Normal is fast. HARDCORE adds capitals, time pressure, and a stricter capital-city target.</p>
+
+            <div class="mode-picker" aria-label="Choose game mode">
+              <button class="mode-card-button" id="startChallenge" type="button">
+                <span class="mode-tag">Normal</span>
+                <strong>Country placement</strong>
+                <small>3 flag attempts. Country map target. 20 points per round.</small>
+                <span class="mode-action">Start Normal</span>
+              </button>
+              <button class="mode-card-button hardcore-pick" id="startHardcore" type="button">
+                <span class="mode-tag hardcore">HARDCORE</span>
+                <strong>Capital challenge</strong>
+                <small>2 flag attempts. One capital attempt. Timed capital-map target.</small>
+                <span class="mode-action hardcore">Start HARDCORE</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="flow-card" aria-label="Game flow">
+            <h2>How it works</h2>
+            <ol class="flow-list">
+              <li><span>1</span><div><strong>Decode the flag</strong><small>No multiple choice. The flag is altered differently each round.</small></div></li>
+              <li><span>2</span><div><strong>Type the answer</strong><small>Normal asks for the country. HARDCORE also asks for the capital.</small></div></li>
+              <li><span>3</span><div><strong>Place it on the map</strong><small>The world map shows land only. Country borders are not displayed.</small></div></li>
+              <li><span>4</span><div><strong>Read the team card</strong><small>See rank, outlook, group context, geography and a fun fact.</small></div></li>
+            </ol>
+            <div class="score-note">
+              <strong>Normal:</strong> flag 10 + map 10.<br />
+              <strong>HARDCORE:</strong> flag 5 + capital 5 + capital map 7 + speed 3.
+            </div>
+            <p class="data-note">Each play gives a fresh five-team set. No login, no downloads inside the game, just a short World Cup geography challenge.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen game-screen" id="screenGame" hidden>
+        <div class="scorebar" aria-label="Current game status">
+          <div>
+            <span class="score-label">Round</span>
+            <strong><span id="roundNow">1</span>/<span id="roundTotal">5</span></strong>
+          </div>
+          <div>
+            <span class="score-label">Score</span>
+            <strong><span id="totalScore">0</span>/100</strong>
+          </div>
+          <div>
+            <span class="score-label">Mode</span>
+            <strong id="modeStatus">Normal</strong>
+          </div>
+          <div>
+            <span class="score-label">Timer</span>
+            <strong id="timerStatus">Untimed</strong>
+          </div>
+          <div>
+            <span class="score-label">Avg. map error</span>
+            <strong id="avgError">—</strong>
+          </div>
+        </div>
+
+        <div class="game-layout">
+          <aside class="round-card" aria-live="polite">
+            <div class="round-head">
+              <span class="round-pill" id="roundLabel">Round 1 of 5</span>
+              <span class="view-pill" id="viewLabel">Altered flag</span>
+            </div>
+
+            <div class="flag-stage" id="flagStage">
+              <img id="promptFlag" class="prompt-flag" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="Altered flag to identify" />
+            </div>
+
+            <h2 id="promptTitle">Name the country from the altered flag.</h2>
+            <p id="promptText">Type the country name. The map opens after your answer.</p>
+
+            <div class="feedback-box" id="feedbackBox" hidden></div>
+            <div class="answer-panel" id="answerPanel"></div>
+
+            <div class="round-actions">
+              <button class="primary-button" id="nextButton" type="button" hidden>Next team</button>
+              <button class="primary-button" id="finishButton" type="button" hidden>See final cards</button>
+            </div>
+          </aside>
+
+          <section class="map-card" aria-label="World map placement area">
+            <div class="map-toolbar">
+              <div>
+                <strong>World map</strong>
+                <span id="mapInstruction">Locked until the flag is answered.</span>
+              </div>
+              <div class="map-controls" aria-label="Map controls">
+                <button class="map-button" id="zoomIn" type="button" aria-label="Zoom in">+</button>
+                <button class="map-button" id="zoomOut" type="button" aria-label="Zoom out">−</button>
+                <button class="map-button" id="resetMap" type="button">Reset</button>
+              </div>
+            </div>
+            <div class="map-wrap">
+              <svg id="worldMap" class="world-map" viewBox="0 0 1000 500" role="img" aria-label="Clickable world map with landmasses only and no country borders"></svg>
+            </div>
+            <div class="map-footer">
+              <span id="selectedCoords">No spot selected.</span>
+              <button class="primary-button compact" id="confirmMap" type="button" disabled>Confirm spot</button>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="screen results-screen" id="screenResults" hidden>
+        <div class="results-card">
+          <p class="eyebrow">Game complete</p>
+          <h2>Your five team cards</h2>
+          <p id="resultsSummary">Your result will appear here.</p>
+          <div class="result-metrics" id="resultMetrics"></div>
+          <div class="results-actions">
+            <button class="primary-button" id="playAgain" type="button">Play another 5</button>
+            <button class="quiet-button" id="copyResults" type="button">Copy summary</button>
+          </div>
+        </div>
+        <div class="profile-grid" id="profileGrid" aria-label="Unlocked team profile cards"></div>
+      </section>
+          <noscript>
+        <div class="results-card">This game requires JavaScript. Enable JavaScript or open it in a modern browser.</div>
+      </noscript>
+    </main>
+  </div>
+
+  <script src="assets/data.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>
